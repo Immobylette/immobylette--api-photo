@@ -4,7 +4,7 @@ import com.google.cloud.storage.StorageException;
 import com.immobylette.api.photo.dto.PhotoDto;
 import com.immobylette.api.photo.mapper.PhotoMapper;
 import com.immobylette.api.photo.repository.PhotoRepository;
-import com.immobylette.api.photo.resource.GCS;
+import com.immobylette.api.photo.resource.GCSResource;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.immobylette.api.photo.entity.Photo;
@@ -18,14 +18,14 @@ import java.util.UUID;
 @Service
 public class PhotoService {
     private final PhotoRepository photoRepository;
-    private final GCS gcs;
+    private final GCSResource gcsResource;
     private final PhotoMapper photoMapper;
 
     public PhotoDto getPhoto(UUID id) throws PhotoNotFoundException, GCPStorageException {
         URL url;
         Photo photo = photoRepository.findById(id).orElseThrow(() -> new PhotoNotFoundException(id));
         try{
-            url = gcs.getSignedUrl(photo.getId().toString());
+            url = gcsResource.getSignedUrl(photo.getId().toString());
         } catch (StorageException e) {
             throw new GCPStorageException("Error getting signed URL");
         }

@@ -12,11 +12,11 @@ import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class GCS {
+public class GCSResource {
     private final GCSconfig gcsConfig;
     private Storage storage;
 
-    public GCS(GCSconfig gcsConfig) throws IOException {
+    public GCSResource(GCSconfig gcsConfig) throws IOException {
         this.gcsConfig = gcsConfig;
         this.setup();
     }
