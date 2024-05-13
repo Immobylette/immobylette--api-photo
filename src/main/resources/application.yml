@@ -28,4 +28,4 @@ server:
 gcs:
   project-id: ${GCP_PROJECT_ID:immobylette}
   bucket-name: ${GCP_BUCKET_NAME:immobylette--photos}
-  credentials-location: ${GCP_CREDENTIALS_LOCATION:immobylette-credentials.json}
+  credentials-location: immobylette-credentials.json
