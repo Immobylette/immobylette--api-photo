@@ -17,18 +17,23 @@ import java.util.UUID;
 @AllArgsConstructor
 @Service
 public class PhotoService {
+
     private final PhotoRepository photoRepository;
+
     private final GCSResource gcsResource;
+
     private final PhotoMapper photoMapper;
 
-    public PhotoDto getPhoto(UUID id) throws PhotoNotFoundException, GCPStorageException {
-        URL url;
+    public PhotoDto getPhoto(UUID id) throws PhotoNotFoundException{
         Photo photo = photoRepository.findById(id).orElseThrow(() -> new PhotoNotFoundException(id));
-        try{
-            url = gcsResource.getSignedUrl(photo.getId().toString());
-        } catch (StorageException e) {
-            throw new GCPStorageException("Error getting signed URL");
-        }
+        URL url = gcsResource.getSignedUrl(id.toString());
+
+        return photoMapper.fromPhoto(photo, url);
+    }
+
+    public PhotoDto getPhotoInFolder(UUID folder, UUID photoId) throws PhotoNotFoundException {
+        Photo photo = photoRepository.findById(photoId).orElseThrow(() -> new PhotoNotFoundException(photoId));
+        URL url = gcsResource.getSignedUrl(String.format("%s/%s", folder, photoId));
 
         return photoMapper.fromPhoto(photo, url);
     }

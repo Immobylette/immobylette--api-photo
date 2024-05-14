@@ -22,7 +22,7 @@ public class FolderController {
     }
 
     @GetMapping("/folders/{id}")
-    public FolderSummaryDto getFolder(@PathVariable UUID id) {
+    public FolderSummaryDto getFolder(@PathVariable UUID id) throws FolderNotFoundException{
         return folderService.getFolder(id);
     }
 }

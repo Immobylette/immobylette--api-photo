@@ -21,8 +21,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @Service
 public class FolderService {
+
     private final PhotoRepository photoRepository;
-    private final GCSResource gcsResource;
+
     private final FolderRepository folderRepository;
 
     private final FolderMapper folderMapper;
@@ -30,12 +31,12 @@ public class FolderService {
     private final PhotoService photoService;
 
 
-    public FolderDto getPhotos(UUID id) throws PhotoNotFoundException, GCPStorageException {
+    public FolderDto getPhotos(UUID id) throws FolderNotFoundException, GCPStorageException {
         Folder folder = folderRepository.findById(id).orElseThrow(() -> new FolderNotFoundException(id));
         List<Photo> photos = photoRepository.findByFolderId(folder.getId());
         List<PhotoDto> photoDtos = photos.stream().map(photo -> {
             try {
-                return photoService.getPhoto(photo.getId());
+                return photoService.getPhotoInFolder(folder.getId(), photo.getId());
             } catch (PhotoNotFoundException | GCPStorageException e) {
                 return null;
             }
@@ -44,10 +45,10 @@ public class FolderService {
         return folderMapper.fromFolder(folder, photoDtos);
     }
 
-    public FolderSummaryDto getFolder(UUID id) throws PhotoNotFoundException, GCPStorageException {
-
+    public FolderSummaryDto getFolder(UUID id) throws FolderNotFoundException {
         Folder folder = folderRepository.findById(id).orElseThrow(() -> new FolderNotFoundException(id));
         Integer nbPhotos = photoRepository.countByFolderId(folder.getId());
+
         return folderMapper.fromFolder(folder, nbPhotos);
     }
 }
