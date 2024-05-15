@@ -1,0 +1,10 @@
+version: '3'
+services:
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=immobylette-photo
+      - POSTGRES_USER=postgre
+      - POSTGRES_PASSWORD=fakesecret
+    ports:
+      - '5432:5432'
