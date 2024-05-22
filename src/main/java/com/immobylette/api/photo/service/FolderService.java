@@ -11,10 +11,12 @@ import com.immobylette.api.photo.exception.PhotoNotFoundException;
 import com.immobylette.api.photo.mapper.FolderMapper;
 import com.immobylette.api.photo.repository.FolderRepository;
 import com.immobylette.api.photo.repository.PhotoRepository;
-import com.immobylette.api.photo.resource.GCSResource;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,5 +52,22 @@ public class FolderService {
         Integer nbPhotos = photoRepository.countByFolderId(folder.getId());
 
         return folderMapper.fromFolder(folder, nbPhotos);
+    }
+
+    public UUID createFolder(List<MultipartFile> photos, List<String> descriptions) throws GCPStorageException, IOException {
+        Folder folder = new Folder();
+        folderRepository.save(folder);
+
+        Iterator<MultipartFile> photoIterator = photos.iterator();
+        Iterator<String> descriptionIterator = descriptions.iterator();
+
+        while (photoIterator.hasNext() && descriptionIterator.hasNext()) {
+            MultipartFile file = photoIterator.next();
+            String description = descriptionIterator.next();
+
+            photoService.createPhoto(folder, description, file);
+        }
+
+        return folder.getId();
     }
 }
