@@ -8,6 +8,7 @@ import com.immobylette.api.photo.entity.Photo;
 import com.immobylette.api.photo.exception.FolderNotFoundException;
 import com.immobylette.api.photo.exception.GCPStorageException;
 import com.immobylette.api.photo.exception.PhotoNotFoundException;
+import com.immobylette.api.photo.exception.PhotosAndDescriptionsSizeException;
 import com.immobylette.api.photo.mapper.FolderMapper;
 import com.immobylette.api.photo.repository.FolderRepository;
 import com.immobylette.api.photo.repository.PhotoRepository;
@@ -54,9 +55,13 @@ public class FolderService {
         return folderMapper.fromFolder(folder, nbPhotos);
     }
 
-    public UUID createFolder(List<MultipartFile> photos, List<String> descriptions) throws GCPStorageException, IOException {
+    public UUID createFolder(List<MultipartFile> photos, List<String> descriptions) throws GCPStorageException, IOException, PhotosAndDescriptionsSizeException {
         Folder folder = new Folder();
         folderRepository.save(folder);
+
+        if(photos.size() != descriptions.size()) {
+            throw new PhotosAndDescriptionsSizeException();
+        }
 
         Iterator<MultipartFile> photoIterator = photos.iterator();
         Iterator<String> descriptionIterator = descriptions.iterator();

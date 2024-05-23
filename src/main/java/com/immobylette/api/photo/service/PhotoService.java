@@ -1,6 +1,5 @@
 package com.immobylette.api.photo.service;
 
-import com.google.cloud.storage.Storage;
 import com.immobylette.api.photo.dto.PhotoDto;
 import com.immobylette.api.photo.entity.Folder;
 import com.immobylette.api.photo.mapper.PhotoMapper;
@@ -27,8 +26,6 @@ public class PhotoService {
 
     private final PhotoMapper photoMapper;
 
-    Storage storageClient;
-
     public PhotoDto getPhoto(UUID id) throws PhotoNotFoundException{
         Photo photo = photoRepository.findById(id).orElseThrow(() -> new PhotoNotFoundException(id));
         URL url = gcsResource.getSignedUrl(id.toString());
@@ -52,6 +49,6 @@ public class PhotoService {
 
         String filename = folder.getId() + "/" + photo.getId();
 
-        gcsResource.uploadFile(storageClient, filename, file);
+        gcsResource.uploadFile(filename, file);
     }
 }

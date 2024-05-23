@@ -3,6 +3,8 @@ package com.immobylette.api.photo.controller;
 import com.immobylette.api.photo.dto.FolderDto;
 import com.immobylette.api.photo.dto.FolderSummaryDto;
 import com.immobylette.api.photo.exception.FolderNotFoundException;
+import com.immobylette.api.photo.exception.GCPStorageException;
+import com.immobylette.api.photo.exception.PhotosAndDescriptionsSizeException;
 import com.immobylette.api.photo.service.FolderService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,9 +35,9 @@ public class FolderController {
 
 
     @PostMapping("/folders")
-    public UUID addStep(@RequestPart("photos") List<MultipartFile> photos,
+    public UUID uploadFolder(@RequestPart("photos") List<MultipartFile> photos,
                         @RequestPart("descriptions") List<String> descriptions
-    ) throws IOException {
+    ) throws GCPStorageException, IOException, PhotosAndDescriptionsSizeException {
         return folderService.createFolder(photos, descriptions);
     }
 }

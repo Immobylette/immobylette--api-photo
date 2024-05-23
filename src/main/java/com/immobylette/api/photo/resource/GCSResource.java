@@ -26,9 +26,9 @@ public class GCSResource {
         return storage.signUrl(blobInfo, signedUrlDuration, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
     }
 
-    public void uploadFile(Storage storageClient, String fileName, MultipartFile file) throws IOException {
+    public void uploadFile(String fileName, MultipartFile file) throws IOException {
         BlobInfo blobInfo =
                 BlobInfo.newBuilder(BlobId.of(this.gcsConfig.getBucketName(), fileName)).build();
-        storageClient.createFrom(blobInfo, file.getInputStream());
+        storage.createFrom(blobInfo, file.getInputStream());
     }
 }
