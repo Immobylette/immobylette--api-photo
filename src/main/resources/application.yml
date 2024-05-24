@@ -31,4 +31,4 @@ gcs:
   credentials-location: immobylette-credentials.json
 
 auth:
-  api-key: ${API_KEY:fakekey}
+  api-key: ${AUTH_API_KEY:fakekey}
