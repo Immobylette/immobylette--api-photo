@@ -30,12 +30,6 @@ jobs:
       - name: Copy gcp credentials
         run: echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' > src/main/resources/immobylette-credentials.json
 
-
-      - name : ls
-        run: |
-            ls -la src/main/resources
-            echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
-
       - name: Build with Maven
         run: mvn clean install -DskipTests
 
