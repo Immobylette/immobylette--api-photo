@@ -28,7 +28,7 @@ jobs:
           java-version-file: '.java-version'
 
       - name: Copy gcp credentials
-        run: ls -la
+        run: echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" > src/main/resources/immobylette-credentials.json
 
       - name: Build with Maven
         run: mvn clean install -DskipTests
