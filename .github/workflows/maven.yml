@@ -34,7 +34,7 @@ jobs:
       - name : ls
         run: |
             ls -la src/main/resources
-            cat src/main/resources/immobylette-credentials.json
+            echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" 
 
       - name: Build with Maven
         run: mvn clean install -DskipTests
