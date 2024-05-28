@@ -86,7 +86,7 @@ jobs:
       - name: Get prefix
         id: get_prefix
         run: |
-          prefix=$(echo $(git show -s --format=%s) | cut -d'/' -f 1)")
+          prefix=$(echo $(git show -s --format=%s) | cut -d'/' -f 1))
           echo "Prefix: $prefix"
           echo "prefix=$prefix" >> "$GITHUB_OUTPUT"
 
