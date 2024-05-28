@@ -17,6 +17,9 @@ spring:
     generate-ddl: false
     show-sql: true
     hibernate.ddl-auto: none
+  servlet:
+    multipart:
+      max-file-size: 8MB
 
 server:
   port: 8080
