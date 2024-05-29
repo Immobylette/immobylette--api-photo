@@ -6,7 +6,9 @@ import com.google.cloud.storage.Storage;
 import com.immobylette.api.photo.config.GCSConfig;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
@@ -18,10 +20,15 @@ public class GCSResource {
 
     private Storage storage;
 
-
     public URL getSignedUrl(String objectName) {
         int signedUrlDuration = 1;
         BlobInfo blobInfo = BlobInfo.newBuilder(BlobId.of(this.gcsConfig.getBucketName(), objectName)).build();
         return storage.signUrl(blobInfo, signedUrlDuration, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
+    }
+
+    public void uploadFile(String fileName, MultipartFile file) throws IOException {
+        BlobInfo blobInfo =
+                BlobInfo.newBuilder(BlobId.of(this.gcsConfig.getBucketName(), fileName)).build();
+        storage.createFrom(blobInfo, file.getInputStream());
     }
 }
