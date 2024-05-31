@@ -20,4 +20,9 @@ public class PhotoController {
     public PhotoDto getPhoto(@PathVariable UUID id) throws PhotoNotFoundException, GCPStorageException {
         return photoService.getPhoto(id);
     }
+
+    @GetMapping("/photos/{folderId}/{photoId}")
+    public PhotoDto getPhoto(@PathVariable UUID folderId, @PathVariable UUID photoId) throws PhotoNotFoundException, GCPStorageException {
+        return photoService.getPhoto(folderId, photoId);
+    }
 }

@@ -33,6 +33,13 @@ public class PhotoService {
         return photoMapper.fromPhoto(photo, url);
     }
 
+    public PhotoDto getPhoto(UUID folderId, UUID photoId) throws PhotoNotFoundException{
+        Photo photo = photoRepository.findById(photoId).orElseThrow(() -> new PhotoNotFoundException(photoId));
+        URL url = gcsResource.getSignedUrl(String.format("%s/%s", folderId, photoId));
+
+        return photoMapper.fromPhoto(photo, url);
+    }
+
     public PhotoDto getPhotoInFolder(UUID folder, UUID photoId) throws PhotoNotFoundException {
         Photo photo = photoRepository.findById(photoId).orElseThrow(() -> new PhotoNotFoundException(photoId));
         URL url = gcsResource.getSignedUrl(String.format("%s/%s", folder, photoId));
